@@ -3,7 +3,7 @@
 int main() {
     int n = 0, i, c, h = 1;
     int r[] = {};
-    char j;
+    char j = '9';
     while (n < 1) {
         printf("Insira o valor a ser calculado: ");
         scanf("%i", &n);
@@ -13,12 +13,13 @@ int main() {
     }
     while (j != 'f' && j != 'F' && j != 'd' && j != 'D') {
         printf("Qual cálculo deve ser aplicado sobre o valor? Fatorial (f/F) ou divisores (d/D): ");
-        getchar();
-        scanf("%c", &j);
+        scanf(" %c", &j);
+        printf("TESTE");
         if (j != 'f' && j != 'F' && j != 'd' && j != 'D') {
             printf("Opcao invalida\n");
         }
     }
+    printf("test");
     if (j == 'f' || j == 'F') {
         for (i = 0; i < n; i++) {
             r[i] = (n - i);
