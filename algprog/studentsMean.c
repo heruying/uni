@@ -7,7 +7,7 @@ int main() {
     scanf(" %d", &alunos);
     for (i = 0; i < alunos; i++) {
         printf("Insira os dados: ");
-        scanf("%d %d %d %d %d", &matricula, &p1, &p2, &ap, &tf);
+        scanf("%d %f %f %f %f", &matricula, &p1, &p2, &ap, &tf);
         media = (p1 + p2 + ap + tf) / 4;
         mediageral += media;
         if (media > melhormediafinal) {
@@ -15,8 +15,8 @@ int main() {
             matriculamelhormedia = matricula;
         }
     }
-    printf("Media geral da turma: %f", (mediageral / alunos));
-    printf("Melhor media final de todos os alunos: %f, matrícula: %i", melhormediafinal, matriculamelhormedia);
+    printf("Media geral da turma: %f\n", (mediageral / alunos));
+    printf("Melhor media final de todos os alunos: %f, matrícula: %i\n", melhormediafinal, matriculamelhormedia);
 
 
 }
