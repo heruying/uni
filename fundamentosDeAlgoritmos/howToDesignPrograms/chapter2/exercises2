@@ -1,0 +1,34 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname exercises2) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+;; fahrenheit-to-celsius: number -> number
+;; objective: convert a temperature in fahrenheit to a temperature in celsius
+
+(define (fahrenheit-to-celsius fahrenheit)
+  (/ (- fahrenheit 32) 1.8))
+
+(fahrenheit-to-celsius 32)
+
+;; dollar-to-euro: number -> number
+;; objective: convert a value in dollar to the equivalent in euro
+
+(define (dollar-to-euro dollar)
+  (/ dollar 1.09975))
+
+(dollar-to-euro 1)
+
+;; triangle: number -> number
+;; objective: find the area of a triangle consuming it's length and and height
+
+(define (triangle length height)
+  (/ (* height length) 2))
+
+(triangle 2 3)
+
+;; convert3: number -> number
+;; objective: i don't even know anymore
+
+(define (convert3 x y z)
+  (+ (+ (* z 100) (* y 10)) x))
+
+(convert3 5 3 2)
