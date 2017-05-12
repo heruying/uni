@@ -17,5 +17,10 @@ int main() {
 }
 
 int jumps (actual, i) {
-  if ((actual)
+  if ((actual + stone [(i + 1)] < 50) {
+    return (jumps ([stone[i + 1], (i + 1)]))
+  } else if ((actual + stone [(i + 1)]) == 50) {
+    return (i + 1);
+  } else if
+
 }
