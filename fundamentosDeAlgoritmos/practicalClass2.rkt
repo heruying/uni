@@ -30,18 +30,10 @@
 
 (define (une-urnas urnaA urnaB)
   (cond
-    [(empty? urnaA) (une-urnas (first urnaB) (rest urnaB))]
-    [(empty? urnaB) empty]
-    [(number? urnaA) (cons urnaA (une-urnas (first urnaB) (rest urnaB)))]
     [(not (empty? urnaA)) (cons (first urnaA) (une-urnas (rest urnaA) urnaB))]
-    [(not (empty? urnaB)) (une-urnas (first urnaB) (rest urnaB))]
+    [(not (empty? urnaB)) (une-urnas (rest urnaA) urnaB)]
     [else empty]))
 
-(define (une-varias-urnas urnas)
-  (cond
-    [(not (number? (first urnas))) (une-varias-urnas (une-urnas (first urnas) (rest urnas)))]
-    [(empty? urnas) empty]
-    [else urnas]))
 
 ;; atualiza-votos: candidato, candidato, candidato, lista
 ;; objetivo: atualizar a quantidade de votos dos candidatos a partir da contagem de uma urna (lista)
@@ -68,9 +60,9 @@
 
 (define (percentual-de-votos numero urnas)
   (/
-   (saca-votos (une-varias-urnas urnas) numero)
+   (saca-votos (une-urnas (first urnas) (rest urnas)) numero)
    (/
-    (conta-validos (une-varias-urnas urnas))
+    (conta-validos (une-urnas (first urnas) (rest urnas)))
     100)))
 
-(une-varias-urnas (cons (cons (cons 3 (cons 7 empty)) (cons 5 (cons 9 empty))) (cons (cons 7 empty) (cons 2 empty))))
+(une-urnas (cons (cons 9 empty) (cons 7 empty)) (cons (cons 2 empty) empty))
