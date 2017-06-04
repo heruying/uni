@@ -1,0 +1,27 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname exercises1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+;; square-a-number: number -> number
+
+(define (square x)
+  (expt x 2))
+
+(square 8)
+
+;; sine-of-an-angle: number -> number
+
+(sin 0)
+
+;; maximum: x numbers -> number
+
+(max 1 29 83 0129 92 83)
+
+;; evaluating square roots
+
+(sqrt 4)
+(sqrt 2)
+(sqrt -1)
+
+;; tangent of an angle
+
+(tan 8)
