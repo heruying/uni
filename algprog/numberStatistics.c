@@ -10,7 +10,7 @@ int main() {
   while (c == 1) {
     scanf(" %d %d", &n1, &n2);
     i++;
-    if ((n1 + n2) % 2) {
+    if ((n1 + n2) % 2 && n1 < 3) {
       n[n1][1]++;
       n[n2][1]++;
       aceitos++;
@@ -23,10 +23,11 @@ int main() {
       scanf("%d", &c);
     } while (c != 1 && c != 2);
   }
-  printf("Foram aceitos %d convites.\nForam rejeitados %d convites.", aceitos, rejeitados);
-  for (i = 0; i++ < 10; i++) {
+  printf("Foram aceitos %d convites.\nForam rejeitados %d convites.\n", aceitos, rejeitados);
+  for (i = 0, c = 0; i++ < 10; i++) {
     if (n[i][1] > c) {
-      n1 = 
+      n1 = n[i][0];
     }
   }
+  printf("Dígito %d foi quem teve mais convites aceitos.\n", n1);
 }
