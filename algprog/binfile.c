@@ -9,27 +9,6 @@ typedef struct struct_jogador {
     int niveis;
 } jogador;
 
-int erroAbertura(char opcao) {
-    FILE * highscores;
-    switch (opcao) {
-        case 'a':
-            highscores = fopen("highscores.bin", "ab");
-            break;
-        case 'r':
-            highscores = fopen("highscores.bin", "rb");
-            break;
-        case 'w':
-            highscores = fopen("highscores.bin", "wb");
-            break;
-    } if (highscores == NULL) {
-        fclose(highscores);
-        return -1;
-    } else {
-        fclose(highscores);
-        return 0;
-    }
-}
-
 jogador retornaJogador (char nome[20], float pontuacao, int niveis) {
     struct struct_jogador temp;
     strcpy(temp.nome, nome);
@@ -39,10 +18,11 @@ jogador retornaJogador (char nome[20], float pontuacao, int niveis) {
 }
 
 int leBin() {
-    if (erroAbertura('r')) {
+    FILE * highscores = fopen("highscores.bin", "rb");
+    if (highscores == NULL) {
+        printf("ERRO NA ABERTURA DO ARQUIVO highscores.bin");
         return -1;
     } else {
-        FILE * highscores = fopen("highscores.bin", "rb");
         int structs;
         fseek(highscores, 0, SEEK_END);
         structs = ftell(highscores) / sizeof(jogador);
@@ -51,56 +31,43 @@ int leBin() {
         fread(jogadores, sizeof(jogador), structs, highscores);
         fclose(highscores);
         for (int i = 0; i < structs; i++) {
-            printf("%s, %f, %i", jogadores[i].nome, jogadores[i].pontuacao, jogadores[i].niveis);
+            printf("%s, %f, %i\n", jogadores[i].nome, jogadores[i].pontuacao, jogadores[i].niveis);
         }
         return 0;
     }
 }
 
-jogador procuraBin(char nome[20]) {
-    FILE * highscores = fopen("highscores.bin", "rb");
-    int structs;
-    if (highscores == NULL) {
-        printf("ERRO NA ABERTURA DO ARQUIVO highscores.bin");
-        exit(EXIT_FAILURE);
-    }
-    fseek(highscores, 0, SEEK_END);
-    structs = ftell(highscores) / sizeof(jogador);
-    rewind(highscores);
-    jogador jogadores[structs];
-    fread(jogadores, sizeof(jogador), structs, highscores);
-    fclose(highscores);
-    for (int i = 0; i < structs; i++) {
-        if (nome == jogadores[i].nome) {
-}
-
 int procuraJogador(char nome[20]) {
     FILE * highscores = fopen("highscores.bin", "rb");
-    int structs;
     if (highscores == NULL) {
-        printf("ERRO NA ABERTURA DO ARQUIVO highscores.bin");
-        return -1;
-    }
-    fseek(highscores, 0, SEEK_END);
-    structs = ftell(highscores) / sizeof(jogador);
-    rewind(highscores);
-    jogador jogadores[structs];
-    fread(jogadores, sizeof(jogador), structs, highscores);
-    fclose(highscores);
-    for (int i = 0; i < structs; i++) {
-        if (nome == jogadores[i].nome) {
-            printf("%s, %f, %i", jogadores[i].nome, jogadores[i].pontuacao, jogadores[i].niveis);
-            return 0;
+        printf("ERRO NA ABERTURA DO ARQUIVO highscores.bin\n");
+        return 0;
+    } else {
+        fseek(highscores, 0L, SEEK_END);
+        int structs = ftell(highscores) / sizeof(struct struct_jogador);
+        if (structs) {
+            rewind(highscores);
+            jogador jogadores[structs];
+            fread(jogadores, sizeof(jogador), structs, highscores);
+            fclose(highscores);
+            for (int i = 0; i < structs; i++) {
+                if (!strncmp(nome, jogadores[i].nome, strlen(nome))) {
+                    printf("%s, %f, %i", jogadores[i].nome, jogadores[i].pontuacao, jogadores[i].niveis);
+                    return 1;
+                }
+            }
         }
     }
-    printf("Jogador %s não tem scores registrados.", nome);
-    return -2;
+    fclose(highscores);
+    printf("Jogador %s não tem scores registrados.\n", nome);
+    return 0;
 }
 
 int appendBin(jogador registro) {
-    FILE * highscores = fopen("highscores.bin", "ab");
+    FILE * highscores = fopen("highscores.bin", "a+b");
     if (highscores == NULL) {
         printf("ERRO NA ABERTURA DO ARQUIVO highscores.bin");
+        fclose(highscores);
         return -1;
     }
     fwrite(&registro, sizeof(jogador), 1, highscores);
@@ -109,10 +76,72 @@ int appendBin(jogador registro) {
 }
 
 int atualizaBin(jogador registro, float score) {
-    FILE
+    FILE * highscores = fopen("highscores.bin", "wb");
+    fclose(highscores);
+    return 0;
+    if (highscores == NULL) {
+        printf("ERRO NA ABERTURA DO ARQUIVO highscores.bin");
+        fclose(highscores);
+        return -1;
+    } else {
+        fseek(highscores, 0, SEEK_END);
+        int structs = ftell(highscores) / sizeof(struct struct_jogador);
+        rewind(highscores);
+        jogador jogadores[structs];
+        fread(jogadores, sizeof(struct struct_jogador), structs, highscores);
+        for (int i = 0; i < structs; i++) {
+            if (registro.nome == jogadores[i].nome) {
+                if (score > jogadores[i].pontuacao) {
+                    rewind(highscores);
+                    fwrite(&registro, sizeof(struct struct_jogador), structs, highscores);
+                    fclose(highscores);
+                    return 0;
+                } else {
+                    rewind(highscores);
+                    fwrite(&registro, sizeof(struct struct_jogador), structs, highscores);
+                    fclose(highscores);
+                    return 0;
+                }
+            }
+        }
+    }
+    fclose(highscores);
+    return 0;
 }
-int main () {
-    char nome[20];
 
+int main () {
+    int opcao, niveis;
+    char nome[20];
+    float pontuacao;
+    jogador temporario;
+    printf("1. Procurar score jogador\n2. Adicionar dados jogador\n3. Imprimir scores.\n4. para sair.\n");
+    do {
+        printf("Digite sua opção: ");
+        do {
+            scanf("%d", &opcao);
+        } while (opcao < 1 && opcao > 4);
+        switch (opcao) {
+            case 1:
+                printf("Digite o nome do jogador: ");
+                __fpurge(stdin);
+                scanf("%s", nome);
+                procuraJogador(nome);
+                break;
+            case 2:
+                printf("Digite os dados do jogador: ");
+                __fpurge(stdin);
+                scanf("%s %f %i", nome, &pontuacao, &niveis);
+                temporario = retornaJogador(nome, pontuacao, niveis);
+                if (procuraJogador(temporario.nome)) {
+                    atualizaBin(temporario, temporario.pontuacao);
+                } else {
+                    appendBin(temporario);
+                }
+                break;
+            case 3:
+                leBin();
+                break;
+        }
+    } while (opcao != 4);
     return 0;
 }
