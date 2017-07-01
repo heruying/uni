@@ -88,7 +88,7 @@ void atualizaFuncionario (struct tipo_funcionario *funcionario) {
 
 int atualizaBinario (struct tipo_funcionario funcionario) {
     struct tipo_funcionario funcionarioAntigo;
-    FILE *stream = fopen("funcionarios.bin", "r+b");
+    FILE *stream = fopen("funcionarios.bin", "rb+");
     if (stream == NULL) {
         printf("ERRO NA ABERTURA DO ARQUIVO;\n");
         return -1;
